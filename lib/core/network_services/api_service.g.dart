@@ -23,10 +23,10 @@ class _RestClient implements RestClient {
 
   @override
   Future<APIResponse<ResponseGetUsers>> getUsers() async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<APIResponse<ResponseGetUsers>>(Options(
       method: 'GET',
@@ -53,7 +53,7 @@ class _RestClient implements RestClient {
 
   @override
   Future<APIResponse<ResponseUser>> addNewUser(UserModel userModel) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -84,7 +84,7 @@ class _RestClient implements RestClient {
 
   @override
   Future<APIResponse<ResponseUser>> updateUser(UserModel userModel) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -115,10 +115,10 @@ class _RestClient implements RestClient {
 
   @override
   Future<APIResponse<dynamic>> deleteUser(String id) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<APIResponse<dynamic>>(Options(
       method: 'DELETE',

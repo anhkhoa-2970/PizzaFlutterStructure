@@ -41,6 +41,12 @@ class _UserPageState extends State<UserPage> {
                 children: [
                   OutlinedButton(
                       onPressed: () {
+                        context.go('/userHome/userList');
+                      },
+                      child: const Text('go to list user')),
+                  const SizedBox(height: 10),
+                  OutlinedButton(
+                      onPressed: () {
                         if (_users.isNotEmpty) {
                           context.pushNamed(AppRoutes.userList.name, extra: _users);
                         } else {

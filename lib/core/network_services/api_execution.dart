@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
 import 'package:testxxxx/core/network_services/error_handler.dart';
 import 'package:testxxxx/core/network_services/api_response.dart';
 import 'package:testxxxx/core/network_services/network_info.dart';

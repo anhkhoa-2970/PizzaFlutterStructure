@@ -5,6 +5,8 @@ import 'package:testxxxx/core/network_services/api_response.dart';
 import 'package:testxxxx/core/network_services/token_interceptor.dart';
 import 'package:testxxxx/data/models/user_model.dart';
 
+import '../../utils/shared_preferences.dart';
+
 part 'api_service.g.dart';
 
 @RestApi(baseUrl: 'https://api.mockfly.dev/mocks/868039bb-5857-47bd-9812-152645da1551/')

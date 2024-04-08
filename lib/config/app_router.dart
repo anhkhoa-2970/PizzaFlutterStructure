@@ -18,6 +18,7 @@ final _shellNavigator3Key = GlobalKey<NavigatorState>(debugLabel: 'shell3');
 final scaffoldKey = GlobalKey<ScaffoldState>();
 
 final GoRouter router = GoRouter(
+
     debugLogDiagnostics: kDebugMode,
     navigatorKey: _rootNavigatorKey,
     routes: [
@@ -25,14 +26,17 @@ final GoRouter router = GoRouter(
         path: AppRoutes.userHome.path,
         name: AppRoutes.userHome.name,
         builder: (context, state) => const UserPage(),
+        routes: [
+          GoRoute(
+            path: AppRoutes.userList.name,
+            name: AppRoutes.userList.name,
+            builder: (context, state) {
+              return UserListPage(state.extra != null ? state.extra as List<UserEntity> : List.empty());
+            },
+          ),
+        ]
       ),
-      GoRoute(
-        path: AppRoutes.userList.path,
-        name: AppRoutes.userList.name,
-        builder: (context, state) {
-          return UserListPage(state.extra as List<UserEntity>);
-        },
-      ),
+
       StatefulShellRoute.indexedStack(
         branches: [createTab1Routes(), createTab2Routes(), createTab3Routes()],
         builder: (context, state, navigationShell) {
@@ -40,14 +44,14 @@ final GoRouter router = GoRouter(
         },
       )
     ],
-    initialLocation: AppRoutes.tab1Home.path);
+    initialLocation: AppRoutes.userHome.path);
 
 StatefulShellBranch createTab1Routes() {
   return StatefulShellBranch(routes: [
     GoRoute(
       path: AppRoutes.tab1Home.path,
       name: AppRoutes.tab1Home.name,
-      builder: (context, state) => Tab1Page(),
+      builder: (context, state) => const Tab1Page(),
     ),
     GoRoute(
       path: AppRoutes.tab1Details.path,
