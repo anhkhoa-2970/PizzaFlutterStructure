@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testxxxx/core/theme/app_palette.dart';
 import 'package:testxxxx/presentation/blocs/sign_in/sign_in_bloc.dart';
@@ -28,30 +30,44 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Scaffold(
-        body: BlocListener<SignInBloc, SignInState>(
-          listener: (context, state) {
-            if(state is SignInSuccess) {
-              setState(() {
-                signInRequired = false;
-              });
-            } else if(state is SignInProcess) {
-              setState(() {
-                signInRequired = true;
-              });
-            } else if(state is SignInFailure) {
-              setState(() {
-                signInRequired = false;
-                _errorMessage = 'Invalid email or password';
-              });
-            }
-          },
+    return Scaffold(
+      body: BlocListener<SignInBloc, SignInState>(
+        listener: (context, state) {
+          if (state is SignInSuccess) {
+            setState(() {
+              signInRequired = false;
+            });
+          } else if (state is SignInProcess) {
+            setState(() {
+              signInRequired = true;
+            });
+          } else if (state is SignInFailure) {
+            setState(() {
+              signInRequired = false;
+              _errorMessage = 'Invalid email or password';
+            });
+          }
+        },
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  ColorAppPalette.colorMain,
+                  ColorAppPalette.whiteColor,
+                  ColorAppPalette.whiteColor,
+                  ColorAppPalette.whiteColor
+                ]),
+          ),
           child: Form(
             key: _formKey,
             child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 20),
+                const SizedBox(height: 60),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: CustomInputTextField(
@@ -85,7 +101,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     validator: (val) {
                       if (val!.isEmpty) {
                         return 'Please fill in this field';
-                      } else if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$').hasMatch(val)) {
+                      } else if (!RegExp(
+                              r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
+                          .hasMatch(val)) {
                         return 'Please enter a valid password';
                       }
                       return null;
@@ -94,7 +112,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       onPressed: () {
                         setState(() {
                           obscurePassword = !obscurePassword;
-                          if(obscurePassword) {
+                          if (obscurePassword) {
                             iconPassword = CupertinoIcons.eye_fill;
                           } else {
                             iconPassword = CupertinoIcons.eye_slash_fill;
@@ -104,46 +122,47 @@ class _SignInScreenState extends State<SignInScreen> {
                       icon: Icon(iconPassword),
                     ),
                   ),
-                )
-                ,const SizedBox(
+                ),
+                const SizedBox(
                   height: 20,
                 ),
                 !signInRequired
                     ? SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: TextButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.read<SignInBloc>().add(SignInRequired(
-                            emailController.text, passwordController.text));
-                      }
-                    },
-                    style: TextButton.styleFrom(
-                        elevation: 3.0,
-                        backgroundColor: ColorAppPalette.greyColor,
-                        foregroundColor: ColorAppPalette.whiteColor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(60))),
-                    child: const Padding(
-                      padding:
-                      EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                      child: Text(
-                        'Sign In',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ),
-                )
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: TextButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<SignInBloc>().add(SignInRequired(
+                                  emailController.text,
+                                  passwordController.text));
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                              elevation: 3.0,
+                              backgroundColor: ColorAppPalette.greyColor,
+                              foregroundColor: ColorAppPalette.whiteColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(60))),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 5),
+                            child: Text(
+                              'Sign In',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ),
+                      )
                     : const LoadingWidget()
               ],
             ),
           ),
         ),
-      );
-
+      ),
+    );
   }
 }

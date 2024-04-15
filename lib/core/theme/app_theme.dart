@@ -13,7 +13,7 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
           contentPadding: const EdgeInsets.all(20),
           enabledBorder: _border(),
-          focusedBorder: _border(ColorAppPalette.gradient2)
+          focusedBorder: _border(ColorAppPalette.borderColorFocus)
       )
   );
 
@@ -23,7 +23,7 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
           contentPadding: const EdgeInsets.all(20),
           enabledBorder: _border(),
-          focusedBorder: _border(ColorAppPalette.gradient2)
+          focusedBorder: _border(ColorAppPalette.borderColorFocus)
       )
   );
 }
