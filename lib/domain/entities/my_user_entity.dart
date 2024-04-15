@@ -15,4 +15,11 @@ class MyUserEntity {
   factory MyUserEntity.fromJson(Map<String, dynamic> json) =>
       _$MyUserEntityFromJson(json);
   Map<String, dynamic> toJson() => _$MyUserEntityToJson(this);
+
+  static final empty = MyUserEntity(
+    userId: '',
+    email: '',
+    name: '',
+    hasActiveCart: false,
+  );
 }

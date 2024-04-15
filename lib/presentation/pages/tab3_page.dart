@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:testxxxx/config/app_router.dart';
 import 'package:testxxxx/config/app_routes.dart';
+import 'package:testxxxx/utils/shared_preferences.dart';
+
+import '../../utils/constants.dart';
 
 class Tab3Page extends StatelessWidget {
   const Tab3Page({super.key});
@@ -23,7 +27,8 @@ class Tab3Page extends StatelessWidget {
           width: double.infinity,
           child: OutlinedButton(
               onPressed: () {
-                router.pushNamed(AppRoutes.tab3Details.name);
+                SharedPreferencesHelper().saveData(keyLogin, '');
+                context.go(AppRoutes.userHome.path);
               },
               style: OutlinedButton.styleFrom(backgroundColor: Colors.white),
               child: const Text("Go to Tab3DetailPage", style: TextStyle(color: Colors.black))),

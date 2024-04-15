@@ -11,6 +11,11 @@ import 'package:testxxxx/presentation/pages/tab_home_page.dart';
 import 'package:testxxxx/presentation/pages/user_list_page.dart';
 import 'package:testxxxx/presentation/pages/user_page.dart';
 
+import '../main.dart';
+import '../presentation/pages/auth/sign_in_screen.dart';
+import '../utils/constants.dart';
+import '../utils/shared_preferences.dart';
+
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigator1Key = GlobalKey<NavigatorState>(debugLabel: 'shell1');
 final _shellNavigator2Key = GlobalKey<NavigatorState>(debugLabel: 'shell2');
@@ -18,14 +23,14 @@ final _shellNavigator3Key = GlobalKey<NavigatorState>(debugLabel: 'shell3');
 final scaffoldKey = GlobalKey<ScaffoldState>();
 
 final GoRouter router = GoRouter(
-
     debugLogDiagnostics: kDebugMode,
     navigatorKey: _rootNavigatorKey,
     routes: [
       GoRoute(
         path: AppRoutes.userHome.path,
         name: AppRoutes.userHome.name,
-        builder: (context, state) => const UserPage(),
+        builder: (context, state) => const SignInScreen(),
+        // builder: (context, state) => const UserPage(),
         routes: [
           GoRoute(
             path: AppRoutes.userList.name,
@@ -44,7 +49,7 @@ final GoRouter router = GoRouter(
         },
       )
     ],
-    initialLocation: AppRoutes.userHome.path);
+    initialLocation: startDestination );
 
 StatefulShellBranch createTab1Routes() {
   return StatefulShellBranch(routes: [
@@ -89,4 +94,14 @@ StatefulShellBranch createTab3Routes() {
       builder: (context, state) => const Tab3DetailPage(),
     )
   ], navigatorKey: _shellNavigator3Key);
+}
+
+
+Future<String> checkLogin() async {
+  String? isLogin = await SharedPreferencesHelper().loadData(keyLogin);
+  if (isLogin != null && isLogin.isNotEmpty) {
+    return AppRoutes.tab1Home.path;
+  } else {
+    return AppRoutes.userHome.path;
+  }
 }

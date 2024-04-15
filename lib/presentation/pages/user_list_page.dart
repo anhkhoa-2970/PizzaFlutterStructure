@@ -7,6 +7,8 @@ import 'package:testxxxx/domain/entities/user_entity.dart';
 import 'package:testxxxx/generated/locale_keys.g.dart';
 
 import '../../config/app_routes.dart';
+import '../../utils/constants.dart';
+import '../../utils/shared_preferences.dart';
 
 class UserListPage extends StatelessWidget {
 
@@ -28,6 +30,7 @@ class UserListPage extends StatelessWidget {
         children: [
           OutlinedButton(
               onPressed: () {
+                SharedPreferencesHelper().saveData(keyLogin,AppRoutes.tab1Home.path);
                 context.go(AppRoutes.tab1Home.path);
               },
               child: const Text('go to list user')),

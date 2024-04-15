@@ -3,7 +3,7 @@ import 'package:testxxxx/core/theme/app_palette.dart';
 
 class AppTheme {
   static  _border([Color color = ColorAppPalette.borderColor]) => OutlineInputBorder(
-    borderSide:  BorderSide(color: color, width: 3),
+    borderSide:  BorderSide(color: color, width: 1),
     borderRadius:  BorderRadius.circular(10),
   );
 

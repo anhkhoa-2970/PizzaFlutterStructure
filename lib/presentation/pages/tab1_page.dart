@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:testxxxx/config/app_router.dart';
 import 'package:testxxxx/config/app_routes.dart';
 
+import '../../utils/constants.dart';
+import '../../utils/shared_preferences.dart';
+
 class Tab1Page extends StatelessWidget {
 
   const Tab1Page({super.key});
@@ -52,7 +55,13 @@ class Tab1DetailPage extends StatelessWidget {
         color: Colors.white,
         padding: const EdgeInsets.all(20),
         alignment: Alignment.center,
-        child: Text(runtimeType.toString(), style: const TextStyle(color: Colors.black)),
+        child: OutlinedButton(
+          onPressed: () {
+
+          },
+          style: OutlinedButton.styleFrom(backgroundColor: Colors.white),
+          child: const Text("Go to Tab1DetailPage", style: TextStyle(color: Colors.redAccent)),
+        ),
       ),
     );
   }
