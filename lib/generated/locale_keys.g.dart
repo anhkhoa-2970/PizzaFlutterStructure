@@ -20,5 +20,7 @@ abstract class  LocaleKeys {
   static const default_error = 'default_error';
   static const cache_error = 'cache_error';
   static const no_internet_error = 'no_internet_error';
+  static const vietnamese = 'vietnamese';
+  static const english = 'english';
 
 }

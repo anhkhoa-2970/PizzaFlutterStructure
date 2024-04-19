@@ -11,7 +11,7 @@ class ColorAppPalette{
   static const Color borderColorFocus = Color(0xFF13A1BE);
   static const Color focusBorderColor = Color.fromRGBO(137, 128, 218, 1.0);
   static const Color whiteColor = Colors.white;
-  static const Color greyColor = Colors.grey;
+  static const Color greyColor = Color(0xFF7D7D7D);
   static const Color errorColor = Colors.redAccent;
   static const Color transparentColor = Colors.transparent;
   static const Color colorMain = Color.fromRGBO(19,161,190,100);
