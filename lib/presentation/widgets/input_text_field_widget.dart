@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:testxxxx/core/theme/app_palette.dart';
 
@@ -15,6 +17,8 @@ class CustomInputTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final String? errorMessage;
   final String? Function(String?)? onChanged;
+  final double? marginHorizontal;
+  final double? height;
 
   const CustomInputTextField(
       {super.key,
@@ -28,7 +32,9 @@ class CustomInputTextField extends StatelessWidget {
       this.validator,
       this.focusNode,
       this.errorMessage,
-      this.onChanged});
+      this.onChanged,
+      this.marginHorizontal,
+      this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -50,23 +56,30 @@ class CustomInputTextField extends StatelessWidget {
       default:
         keyboardType = TextInputType.text;
     }
-    return TextFormField(
-      validator: validator,
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      focusNode: focusNode,
-      onTap: onTap,
-      textInputAction: TextInputAction.next,
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        suffixIcon: suffixIcon,
-        prefixIcon: prefixIcon,
-        fillColor: ColorAppPalette.whiteColor,
-        filled: true,
-        hintText: hintText,
-        hintStyle: TextStyle(color: Colors.grey[500]),
-        errorText: errorMessage,
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: marginHorizontal ?? 0.0),
+      height: height,
+      child: Center( // Wrap the TextFormField with Center
+        child: TextFormField(
+          validator: validator,
+          controller: controller,
+          obscureText: obscureText,
+          keyboardType: keyboardType,
+          focusNode: focusNode,
+          onTap: onTap,
+          textInputAction: TextInputAction.next,
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            suffixIcon: suffixIcon,
+            prefixIcon: prefixIcon,
+            fillColor: ColorAppPalette.whiteColor,
+            filled: true,
+            hintText: hintText,
+            hintStyle: TextStyle(color: Colors.grey[500]),
+            errorText: errorMessage,
+            contentPadding: const EdgeInsets.symmetric(vertical: 0), // Adjust vertical padding here
+          ),
+        ),
       ),
     );
   }

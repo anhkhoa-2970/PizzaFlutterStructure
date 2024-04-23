@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testxxxx/core/theme/app_palette.dart';
 import 'package:testxxxx/domain/entities/language_entity.dart';
@@ -34,22 +33,24 @@ class _SignInScreenState extends State<SignInScreen> {
   bool expanded = false;
   OverlayEntry? entry;
   OverlayState? overlay;
+  bool isEmailPasswordNotEmpty = false;
+
   @override
   void initState() {
     super.initState();
-    _initializeLanguage();
+    emailController.addListener(updateButtonState);
+    passwordController.addListener(updateButtonState);
   }
 
-  void _initializeLanguage() {
-    // getLanguage().then((language) {
-    //   setState(() {
-    //     _selectedLanguage = language;
-    //   });
-    // }).catchError((error) {
-    //   _selectedLanguage = LanguageEntity.getLanguageList().first;
-    //   print('Error fetching initial language: $error');
-    // });
+  void updateButtonState() {
+    setState(() {
+      // Check if both email and password fields are not empty
+      isEmailPasswordNotEmpty =
+          emailController.text.isNotEmpty &&
+             passwordController.text.isNotEmpty;
+    });
   }
+
   void _showOverlayLoading() {
     entry = OverlayEntry(builder: (context) => buildOverlayLoading());
     overlay = Overlay.of(context);
@@ -62,12 +63,23 @@ class _SignInScreenState extends State<SignInScreen> {
       entry = null;
     }
   }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    _hideOverlayLoading();
+    emailController.removeListener(updateButtonState);
+    passwordController.removeListener(updateButtonState);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<SignInBloc, SignInState>(
         listener: (context, state) {
-          switch(state.runtimeType) {
+          switch (state.runtimeType) {
             case SignInSuccess:
               setState(() {
                 _hideOverlayLoading();
@@ -104,152 +116,187 @@ class _SignInScreenState extends State<SignInScreen> {
           //   });
           // }
         },
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  ColorAppPalette.colorMain,
-                  ColorAppPalette.whiteColor,
-                  ColorAppPalette.whiteColor,
-                  ColorAppPalette.whiteColor
-                ]),
-          ),
-          child: Form(
-            key: _formKey,
-            child:   Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const SizedBox(height: 60),
-                CompositedTransformTarget(
-                    link: _link,
-                    child: OverlayPortal(
-                      controller: _tooltipController,
-                      overlayChildBuilder: (BuildContext context) {
-                        return CompositedTransformFollower(
-                          link: _link,
-                          targetAnchor: Alignment.bottomLeft,
-                          child: Align(
-                            alignment: AlignmentDirectional.topStart,
-                            child: LanguageDropdownWidget(
-                              selectedLanguage: _selectedLanguage,
-                              onLanguageSelected: (language) {
-                                setState(() {
-                                  _selectedLanguage = language;
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    ColorAppPalette.colorMain,
+                    ColorAppPalette.whiteColor,
+                    ColorAppPalette.whiteColor,
+                    ColorAppPalette.whiteColor
+                  ]),
+            ),
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 60),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 24),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [CompositedTransformTarget(
+                            link: _link,
+                            child: OverlayPortal(
+                              controller: _tooltipController,
+                              overlayChildBuilder: (BuildContext context) {
+                                return CompositedTransformFollower(
+                                  link: _link,
+                                  targetAnchor: Alignment.bottomLeft,
+                                  child: Align(
+                                    alignment: AlignmentDirectional.topStart,
+                                    child: LanguageDropdownWidget(
+                                      selectedLanguage: _selectedLanguage,
+                                      onLanguageSelected: (language) {
+                                        setState(() {
+                                          _selectedLanguage = language;
+                                          expanded = !expanded;
+                                          onTap(expanded);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: ChooseLanguageWidget(
+                                languageEntity: _selectedLanguage,
+                                onTap: () {
                                   expanded = !expanded;
                                   onTap(expanded);
-                                });
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                      child: ChooseLanguageWidget(
-                        languageEntity: _selectedLanguage,
-                        onTap: () {
-                          expanded = !expanded;
-                          onTap(expanded);
-                        },
+                                },
+                              ),
+                            ))],
                       ),
-                    )),
-                SizedBox(width: double.infinity,height: 300,child:Image.asset('assets/icons/ic_logo_login.png'),),
-                Text('Phone Number'),
-                Container(
-                  margin:const EdgeInsets.only(left: 24,right: 24),width: double.infinity,
-                  height: 45,
-                  child: CustomInputTextField(
-                    controller: emailController,
-                    hintText: 'Email',
-                    obscureText: false,
-                    keyboardType: KeyboardType.email,
-                    prefixIcon: const Icon(CupertinoIcons.mail_solid),
-                    errorMessage: _errorMessage,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return 'Please fill in this field';
-                      } else if (!RegExp(r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
-                          .hasMatch(val)) {
-                        return 'Please enter a valid email';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                 Container(height: 10),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: CustomInputTextField(
-                    controller: passwordController,
-                    hintText: 'Password',
-                    obscureText: obscurePassword,
-                    keyboardType: KeyboardType.password,
-                    prefixIcon: const Icon(CupertinoIcons.lock_fill),
-                    errorMessage: _errorMessage,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return 'Please fill in this field';
-                      } else if (!RegExp(
-                              r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
-                          .hasMatch(val)) {
-                        return 'Please enter a valid password';
-                      }
-                      return null;
-                    },
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          obscurePassword = !obscurePassword;
-                          if (obscurePassword) {
-                            iconPassword = CupertinoIcons.eye_fill;
-                          } else {
-                            iconPassword = CupertinoIcons.eye_slash_fill;
-                          }
-                        });
-                      },
-                      icon: Icon(iconPassword),
                     ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 300,
+                      child: Image.asset('assets/icons/ic_logo_login.png'),
+                    ),
 
-                     SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        child: TextButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              context.read<SignInBloc>().add(SignInRequired(
-                                  emailController.text,
-                                  passwordController.text));
+                    CustomInputTextField(
+                      marginHorizontal: 24,
+                      height: 45,
+                      controller: emailController,
+                      hintText: 'Email',
+                      obscureText: false,
+                      keyboardType: KeyboardType.email,
+                      prefixIcon: const Icon(CupertinoIcons.mail_solid),
+                      errorMessage: _errorMessage,
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Please fill in this field';
+                        } else if (!RegExp(r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
+                            .hasMatch(val)) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
+                    ),
+                    Container(height: 10),
+                    CustomInputTextField(
+                      marginHorizontal: 24,
+                      height: 45,
+                      controller: passwordController,
+                      hintText: 'Password',
+                      obscureText: obscurePassword,
+                      keyboardType: KeyboardType.password,
+                      prefixIcon: const Icon(CupertinoIcons.lock_fill),
+                      errorMessage: _errorMessage,
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Please fill in this field';
+                        } else if (!RegExp(
+                                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~`)\%\-(_+=;:,.<>/?"[{\]}\|^]).{8,}$')
+                            .hasMatch(val)) {
+                          return 'Please enter a valid password';
+                        }
+                        return null;
+                      },
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            obscurePassword = !obscurePassword;
+                            if (obscurePassword) {
+                              iconPassword = CupertinoIcons.eye_fill;
+                            } else {
+                              iconPassword = CupertinoIcons.eye_slash_fill;
                             }
-                          },
-                          style: TextButton.styleFrom(
-                              elevation: 3.0,
-                              backgroundColor: ColorAppPalette.greyColor,
-                              foregroundColor: ColorAppPalette.whiteColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(60))),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 5),
-                            child: Text(
-                              'Sign In',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600),
-                            ),
+                          });
+                        },
+                        icon: Icon(iconPassword),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: TextButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<SignInBloc>().add(SignInRequired(
+                                emailController.text, passwordController.text));
+                          }
+                        },
+                        style: TextButton.styleFrom(
+                            elevation: 3.0,
+                            backgroundColor: isEmailPasswordNotEmpty
+                                ? ColorAppPalette.greyColor // Use grey color when fields are not empty
+                                : Colors.grey[300],
+                            foregroundColor: ColorAppPalette.whiteColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(60))),
+                        child: const Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+                          child: Text(
+                            'Sign In',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
                           ),
                         ),
-                      )
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: (){
+
+                      },
+                      child: RichText(
+                        text: TextSpan(
+                            text: 'Don\'t have an account? ',
+                            style: Theme.of(context).textTheme.titleMedium,
+                            children: [
+                              TextSpan(
+                                text: 'Sign Up',
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(color: ColorAppPalette.colorMain),
+                              )
+                            ]),
+                      ),
+                    ),
                     // : const LoadingWidget()
-              ],
-            ) ,
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -395,3 +442,4 @@ class _LanguageDropdownWidgetState extends State<LanguageDropdownWidget> {
     );
   }
 }
+
