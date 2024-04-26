@@ -1,16 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:testxxxx/config/app_routes.dart';
 import 'package:testxxxx/domain/entities/user_entity.dart';
+import 'package:testxxxx/presentation/pages/auth/sing_up_screen.dart';
 import 'package:testxxxx/presentation/pages/tab1_page.dart';
 import 'package:testxxxx/presentation/pages/tab2_page.dart';
 import 'package:testxxxx/presentation/pages/tab3_page.dart';
 import 'package:testxxxx/presentation/pages/tab_home_page.dart';
 import 'package:testxxxx/presentation/pages/user_list_page.dart';
-import 'package:testxxxx/presentation/pages/user_page.dart';
-
 import '../main.dart';
 import '../presentation/pages/auth/sign_in_screen.dart';
 import '../utils/constants.dart';
@@ -27,16 +25,15 @@ final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
     routes: [
       GoRoute(
-        path: AppRoutes.userHome.path,
-        name: AppRoutes.userHome.name,
+        path: AppRoutes.login.path,
+        name: AppRoutes.login.name,
         builder: (context, state) => const SignInScreen(),
-        // builder: (context, state) => const UserPage(),
         routes: [
           GoRoute(
-            path: AppRoutes.userList.name,
-            name: AppRoutes.userList.name,
+            path: AppRoutes.signup.name,
+            name: AppRoutes.signup.name,
             builder: (context, state) {
-              return UserListPage(state.extra != null ? state.extra as List<UserEntity> : List.empty());
+              return const SignUpScreen();
             },
           ),
         ]
@@ -102,6 +99,6 @@ Future<String> checkLogin() async {
   if (isLogin != null && isLogin.isNotEmpty) {
     return AppRoutes.tab1Home.path;
   } else {
-    return AppRoutes.userHome.path;
+    return AppRoutes.login.path;
   }
 }

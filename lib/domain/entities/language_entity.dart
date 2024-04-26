@@ -13,10 +13,11 @@ part 'language_entity.g.dart';
 class LanguageEntity {
   final int id;
   final String language;
+  final String code;
   final String flag;
 
   LanguageEntity(
-      {required this.id, required this.language, required this.flag});
+      {required this.id, required this.language, required this.code, required this.flag});
 
   factory LanguageEntity.fromJson(Map<String, dynamic> json) => _$LanguageEntityFromJson(json);
   Map<String, dynamic> toJson() => _$LanguageEntityToJson(this);
@@ -26,15 +27,17 @@ class LanguageEntity {
       LanguageEntity(
           id: 1,
           language: LocaleKeys.vietnamese.tr(),
+          code: 'vn',
           flag: 'assets/icons/ic_flag_vn.png'),
       LanguageEntity(
           id: 2,
           language: LocaleKeys.english.tr(),
+          code: 'en',
           flag: 'assets/icons/ic_flag_vn.png')
     ];
   }
   static Future<int?> getPref() async {
     final jsonString = await SharedPreferencesHelper().loadData(keyLanguage);
-    return jsonString != null ? LanguageEntity.fromJson(json.decode(jsonString)).id : null;
+    return jsonString != null ? LanguageEntity.fromJson(json.decode(jsonString)).id : 1;
   }
 }

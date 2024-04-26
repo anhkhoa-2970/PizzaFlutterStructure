@@ -13,13 +13,10 @@ part 'authentication_event.dart';
 
 part 'authentication_state.dart';
 
-class AuthenticationBloc
-    extends Bloc<AuthenticationEvent, AuthenticationState> {
-  late final StreamSubscription<Either<Failure, MyUserEntity>>
-      _userSubscription;
+class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
+  late final StreamSubscription<Either<Failure, MyUserEntity>> _userSubscription;
 
-  AuthenticationBloc({required AuthenticationUseCase useCase})
-      : super(const AuthenticationState.unknown()) {
+  AuthenticationBloc({required AuthenticationUseCase useCase}) : super(const AuthenticationState.unknown()) {
     _userSubscription = useCase.user.listen((event) {
       event.fold(
         (fail) => {add(const AuthenticationUserChanged(null))},
@@ -28,7 +25,7 @@ class AuthenticationBloc
     });
 
     on<AuthenticationUserChanged>((event, emit) {
-      if(event.myUser != null && event.myUser != MyUserEntity.empty) {
+      if (event.myUser != null && event.myUser != MyUserEntity.empty) {
         emit(AuthenticationState.authenticated(event.myUser!));
       } else {
         emit(const AuthenticationState.unauthenticated());

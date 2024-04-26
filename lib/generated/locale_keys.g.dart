@@ -22,5 +22,14 @@ abstract class  LocaleKeys {
   static const no_internet_error = 'no_internet_error';
   static const vietnamese = 'vietnamese';
   static const english = 'english';
+  static const email = 'email';
+  static const password = 'password';
+  static const confirm_password = 'confirm_password';
+  static const sign_in = 'sign_in';
+  static const sign_up = 'sign_up';
+  static const dont_have_account = 'dont_have_account';
+  static const have_account = 'have_account';
+  static const user_name = 'user_name';
+  static const phone_number = 'phone_number';
 
 }

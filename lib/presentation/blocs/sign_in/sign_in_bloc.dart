@@ -10,7 +10,7 @@ part 'sign_in_state.dart';
 @singleton
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   SignInBloc({required AuthenticationUseCase useCase}) : super(SignInInitial()) {
-    on<SignInRequired>((event, emit) async {
+    on<SignInRequiredEvent>((event, emit) async {
       emit(SignInProcess());
       try {
         final result = await useCase.signIn(event.email, event.password);

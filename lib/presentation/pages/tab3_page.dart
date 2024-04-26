@@ -28,7 +28,7 @@ class Tab3Page extends StatelessWidget {
           child: OutlinedButton(
               onPressed: () {
                 SharedPreferencesHelper().saveData(keyLogin, '');
-                context.go(AppRoutes.userHome.path);
+                context.go(AppRoutes.login.path);
               },
               style: OutlinedButton.styleFrom(backgroundColor: Colors.white),
               child: const Text("Go to Tab3DetailPage", style: TextStyle(color: Colors.black))),

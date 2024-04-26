@@ -7,6 +7,7 @@ import 'package:testxxxx/domain/entities/my_user_entity.dart';
 import 'package:testxxxx/domain/repositories/authenticaiton_repository.dart';
 
 import '../../utils/constants.dart';
+
 @Injectable(as: AuthenticationRepository)
 class AuthenticationImpl implements AuthenticationRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -16,7 +17,7 @@ class AuthenticationImpl implements AuthenticationRepository {
   Future<Either<Failure, void>> logout() async {
     try {
       await _firebaseAuth.signOut();
-      return  const Right(null);
+      return const Right(null);
     } on FirebaseAuthException catch (e) {
       return Left(Failure(errorFromFirebase, '${e.message}'));
     } catch (e) {
@@ -26,19 +27,18 @@ class AuthenticationImpl implements AuthenticationRepository {
 
   @override
   Future<Either<Failure, void>> setUserData(MyUserEntity myUser) async {
-    try{
-      await userCollection.doc(myUser.userId).set(myUser.toJson());
+    try {
+      await userCollection.doc(myUser.phoneNumber).set(myUser.toJson());
       return const Right(null);
     } catch (e) {
-      return Left(Failure(errorFromFirebase,'$e'));
+      return Left(Failure(errorFromFirebase, '$e'));
     }
   }
 
   @override
   Future<Either<Failure, void>> signIn(String email, String password) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       return const Right(null);
     } on FirebaseAuthException catch (e) {
       // String errorMessage = "Failed to sign in";
@@ -64,12 +64,10 @@ class AuthenticationImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<Failure, MyUserEntity>> signUp(
-      MyUserEntity myUser, String password) async {
+  Future<Either<Failure, MyUserEntity>> signUp(MyUserEntity myUser, String password) async {
     try {
-      UserCredential user = await _firebaseAuth.createUserWithEmailAndPassword(
-          email: myUser.email ?? '', password: password);
-      myUser.userId = user.user?.uid;
+      UserCredential user = await _firebaseAuth.createUserWithEmailAndPassword(email: myUser.email ?? '', password: password);
+      myUser.phoneNumber = user.user?.uid;
       return Right(myUser);
     } on FirebaseAuthException catch (e) {
       return Left(Failure(errorFromFirebase, '${e.message}'));

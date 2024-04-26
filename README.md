@@ -17,9 +17,9 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Command statement
 
-flutter pub run easy_localization:generate -f keys -o locale_keys.g.dart -S assets/translations
+dart run easy_localization:generate -f keys -o locale_keys.g.dart -S assets/translations
 
-dart pub run build_runner build
+dart run build_runner build
 
 flutter pub global activate build_runner
 

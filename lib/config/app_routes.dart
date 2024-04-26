@@ -1,6 +1,7 @@
 /// Represents the app routes and their paths.
 enum AppRoutes {
   login(name: 'login', path: '/login'),
+  signup(name: 'signup', path: '/login/signup'),
   userHome(name: 'userHome', path: '/userHome'),
   userList(name: 'userList', path: '/userList'),
   tab1Home(name: 'tab1Home', path: '/tab1Home'),

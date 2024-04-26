@@ -8,11 +8,11 @@ import 'mapper.dart';
 class MyUserMapper implements Mapper<MyUserModel, MyUserEntity>{
   @override
   MyUserModel entityToModel(MyUserEntity entity) {
-    return MyUserModel(userId: entity.userId, email: entity.email, password: entity.password, name: entity.name, hasActiveCart: entity.hasActiveCart);
+    return MyUserModel(userId: entity.phoneNumber, email: entity.email, password: entity.password, name: entity.name, hasActiveCart: entity.hasActiveCart);
   }
 
   @override
   MyUserEntity modelToEntity(MyUserModel model) {
-    return MyUserEntity(userId: model.userId, email: model.email, password: model.password, name: model.name, hasActiveCart: model.hasActiveCart);
+    return MyUserEntity(phoneNumber: model.userId, email: model.email, password: model.password, name: model.name, hasActiveCart: model.hasActiveCart);
   }
 }

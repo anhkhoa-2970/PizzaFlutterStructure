@@ -20,5 +20,14 @@
   "cache_error": "cache error, try again later",
   "no_internet_error": "Please check your internet connection",
   "vietnamese": "Vietnamese",
-  "english": "English"
+  "english": "English",
+  "email": "Email",
+  "password": "Password",
+  "confirm_password": "Confirm Password",
+  "sign_in": "Sign In",
+  "sign_up":  "Sign Up",
+  "dont_have_account": "Don't have an account? ",
+  "have_account": "You have an account? ",
+  "user_name": "User Name",
+  "phone_number": "Phone Number"
 }
